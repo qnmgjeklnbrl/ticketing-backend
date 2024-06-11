@@ -1,3 +1,4 @@
+
 name: WAS container images build to ECR
 
 on:
