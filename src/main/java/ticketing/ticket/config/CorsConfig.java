@@ -16,7 +16,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry
             .addMapping("/**")
             .allowedHeaders("*")
-            .allowedOrigins("http://localhost:8080")
+            .allowedOrigins("http://localhost:8080","https://d2yldon36ylcmn.cloudfront.net")
             .allowedMethods("*");
     }
 }
