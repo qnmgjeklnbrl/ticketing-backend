@@ -4,6 +4,10 @@ import java.util.*;
 
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -13,7 +17,9 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import ticketing.ticket.performance.domain.dto.PerfSearchDto;
 import ticketing.ticket.performance.domain.entity.PerformanceDetail;
+import ticketing.ticket.performance.domain.entity.QPerformanceDetail;
 import ticketing.ticket.performance.repository.PerformanceDetailRepository;
+import static ticketing.ticket.performance.domain.entity.QPerformanceDetail.performanceDetail;
 
 @Repository
 public class PerformanceDetailRepositoryImpl implements PerformanceDetailRepository {
@@ -37,42 +43,64 @@ public class PerformanceDetailRepositoryImpl implements PerformanceDetailReposit
     // 카테고리별 조회
     @Override
     public List<PerformanceDetail> findByPerformanceId(PerfSearchDto perfSearchDto) {
-         String jpql = "select p from PerformanceDetail p join fetch p.performance where " +
-                "(:perfId is null or p.performance.id = :perfId) and " +
-                "(:title is null or p.artist like concat('%', :title, '%')) and " +
-                "(:button is null or " +
-                "(:button = 'next' and p.id < :index) or " +
-                "(:button = 'previous' and p.id > :index)) " +
-                "order by case when :button = 'next' then p.id end desc, " +
-                "case when :button = 'previous' then p.id end asc";
-        TypedQuery<PerformanceDetail> query = em.createQuery(jpql, PerformanceDetail.class);
-        if (perfSearchDto.getPerfId() != null) {
-            query.setParameter("perfId", perfSearchDto.getPerfId());
-        } else {
-            query.setParameter("perfId", null);
-        }
-        if (perfSearchDto.getIndex() != null) {
-            query.setParameter("index", perfSearchDto.getIndex());
-        } else {
-            Long index = findMaxIdByPerformanceId(perfSearchDto.getPerfId()) + 1;
-            query.setParameter("index", index);
-        }
-        if (perfSearchDto.getButton() != null) {
-            query.setParameter("button", perfSearchDto.getButton());
-        } else {
-            query.setParameter("button", null);
-        }
-        if (perfSearchDto.getTitle() != null) {
-            query.setParameter("title", perfSearchDto.getTitle());
-        } else {
-            query.setParameter("title", null);
-        }
-        query.setMaxResults(perfSearchDto.getSize());
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        List<PerformanceDetail> resultList = query.getResultList();
 
-        return resultList;
+        List<PerformanceDetail> results = queryFactory
+            .selectFrom(performanceDetail)
+            .leftJoin(performanceDetail.performance)
+            .fetchJoin()
+            .where(
+                eqPerfId(perfSearchDto.getPerfId()),
+                selectByIdxAndBtn(perfSearchDto.getIndex(), perfSearchDto.getPerfId(), perfSearchDto.getButton()),
+                eqTitle(perfSearchDto.getTitle())
+            )
+            .orderBy(performanceDetail.performanceDetailId.desc())
+            .limit(perfSearchDto.getSize())
+            .fetch();
+        results.forEach(System.out::println );
+        return results;
+
+        
     }
+
+    private BooleanExpression eqPerfId(Long perfId){
+        if (perfId == null) {
+            return null;
+        } else {
+            return performanceDetail.performance.performanceId.eq(perfId);
+        }
+   }
+
+   private BooleanExpression selectByIdxAndBtn(Integer idx, Long perfId, String button){
+        if (idx == null) {
+        
+           Long maxidx =findMaxIdByPerformanceId(perfId)+1;
+           System.out.println("maxidx : " + maxidx);
+           System.out.println(performanceDetail.performanceDetailId.lt(maxidx));
+           return performanceDetail.performanceDetailId.lt(maxidx);
+           
+        } else {
+            if (button.equals("next")) {
+                
+                return performanceDetail.performanceDetailId.lt(Long.valueOf(idx));
+            } else {
+                
+                return performanceDetail.performanceDetailId.gt(Long.valueOf(idx));
+            }
+        }
+   }
+
+   private BooleanExpression eqTitle(String title){
+        if (title == null) {
+            return null;
+        } else {
+            return performanceDetail.artist.like("%" + title + "%");
+        }
+   }
+
+
+ 
    
     // 모두 조회
     @Override
