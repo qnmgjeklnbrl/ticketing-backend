@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import slack.alarm.aop.annotation.SlackNotification;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(PageantionException.class)
+    //@SlackNotification
     public ResponseEntity<Map<String, String>> handlePageantionException(PageantionException e, HttpServletRequest request) {
         
         HttpHeaders responssHeaders = new HttpHeaders();

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import ticketing.ticket.config.JwtTokenProvider;
+import ticketing.ticket.config.JwtProvider;
 import ticketing.ticket.member.domain.dto.JwtTokenDto;
 import ticketing.ticket.member.domain.dto.LogInMemberDto;
 import ticketing.ticket.member.domain.dto.MemberDto;
@@ -37,7 +37,7 @@ import ticketing.ticket.member.service.MemberService;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
 

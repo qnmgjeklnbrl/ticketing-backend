@@ -45,7 +45,6 @@ public class PerformanceDetailRepositoryImpl implements PerformanceDetailReposit
                 "(:button = 'previous' and p.id > :index)) " +
                 "order by case when :button = 'next' then p.id end desc, " +
                 "case when :button = 'previous' then p.id end asc";
-
         TypedQuery<PerformanceDetail> query = em.createQuery(jpql, PerformanceDetail.class);
         if (perfSearchDto.getPerfId() != null) {
             query.setParameter("perfId", perfSearchDto.getPerfId());

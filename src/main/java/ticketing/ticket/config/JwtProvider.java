@@ -16,10 +16,10 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtTokenProvider {
+public class JwtProvider {
     private final Key key;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] ketBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(ketBytes);
     }
