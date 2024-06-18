@@ -76,8 +76,6 @@ public class PerformanceDetailRepositoryImpl implements PerformanceDetailReposit
         if (idx == null) {
         
            Long maxidx =findMaxIdByPerformanceId(perfId)+1;
-           System.out.println("maxidx : " + maxidx);
-           System.out.println(performanceDetail.performanceDetailId.lt(maxidx));
            return performanceDetail.performanceDetailId.lt(maxidx);
            
         } else {
@@ -118,17 +116,17 @@ public class PerformanceDetailRepositoryImpl implements PerformanceDetailReposit
     }
     @Override
     public Long findMaxIdByPerformanceId(Long performanceId) {
-    CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<Long> query = cb.createQuery(Long.class);
-    Root<PerformanceDetail> root = query.from(PerformanceDetail.class);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<PerformanceDetail> root = query.from(PerformanceDetail.class);
 
-    query.select(cb.max(root.get("id")));
+        query.select(cb.max(root.get("id")));
 
-    if (performanceId != null) {
-        query.where(cb.equal(root.get("performance").get("id"), performanceId));
-    }
+        if (performanceId != null) {
+            query.where(cb.equal(root.get("performance").get("id"), performanceId));
+        }
 
-    return em.createQuery(query).getSingleResult();
+        return em.createQuery(query).getSingleResult();
     }   
     @Override
     public Long findMinIdByPerformanceId(Long performanceId) {
