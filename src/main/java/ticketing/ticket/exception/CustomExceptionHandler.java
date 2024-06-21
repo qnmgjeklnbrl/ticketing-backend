@@ -15,10 +15,22 @@ import slack.alarm.aop.annotation.SlackNotification;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
-    @ExceptionHandler(PageantionException.class)
+    @ExceptionHandler(PageanationException.class)
     //@SlackNotification
-    public ResponseEntity<Map<String, String>> handlePageantionException(PageantionException e, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> handlePageantionException(PageanationException e, HttpServletRequest request) {
         
+        HttpHeaders responssHeaders = new HttpHeaders();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", e.getMessage());
+        errorMap.put("code", "400");
+        errorMap.put("error type",httpStatus.getReasonPhrase());
+        return new ResponseEntity<>(errorMap, responssHeaders, httpStatus);
+    }
+
+    @ExceptionHandler(DuplicatedCouponException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicatedCouponException(DuplicatedCouponException e, HttpServletRequest request) {
         HttpHeaders responssHeaders = new HttpHeaders();
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         

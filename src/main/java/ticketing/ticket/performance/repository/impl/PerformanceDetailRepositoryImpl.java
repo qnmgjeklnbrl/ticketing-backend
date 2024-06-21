@@ -58,7 +58,6 @@ public class PerformanceDetailRepositoryImpl implements PerformanceDetailReposit
             .orderBy(performanceDetail.performanceDetailId.desc())
             .limit(perfSearchDto.getSize())
             .fetch();
-        results.forEach(System.out::println );
         return results;
 
         

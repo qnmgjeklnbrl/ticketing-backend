@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ticketing.ticket.exception.PageantionException;
+import ticketing.ticket.exception.PageanationException;
 import ticketing.ticket.performance.domain.dto.IdxInfoDto;
 import ticketing.ticket.performance.domain.dto.PerfSearchDto;
 import ticketing.ticket.performance.domain.dto.PerformanceDetailDto;
@@ -103,7 +103,7 @@ public class PerformanceController {
     }
     // 공연 카테고리로 디테일 조회
     @PostMapping("/perform-detail/all")
-    public ResponseEntity<List<PerformanceDetailDto>> getPerformanceDetailByPerformanceId (@RequestBody PerfSearchDto perfSearchDto) throws PageantionException {
+    public ResponseEntity<List<PerformanceDetailDto>> getPerformanceDetailByPerformanceId (@RequestBody PerfSearchDto perfSearchDto) throws PageanationException {
         return ResponseEntity.ok(performanceDetailService.getPerformanceDetailByPerformanceId(perfSearchDto));
     }
 
