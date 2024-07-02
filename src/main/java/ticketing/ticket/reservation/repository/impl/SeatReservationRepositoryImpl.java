@@ -55,7 +55,7 @@ public class SeatReservationRepositoryImpl implements SeatReservationRepository 
                 return seatReservationlist.size();
             }
         });
-        System.out.println("SeatReservation 벌크 인서트");
+        
     }
     
     @Override

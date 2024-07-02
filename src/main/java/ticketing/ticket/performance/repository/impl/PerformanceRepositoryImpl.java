@@ -33,7 +33,7 @@ public class PerformanceRepositoryImpl implements PerformanceRepository{
        return em.find(Performance.class, performanceId);
     }
     // 모두 조회
-    // fetch join안쓰면 n+1문제 
+
     @Override
     public List<Performance> findAll() {
        return em.createQuery("select p from Performance p ",Performance.class).getResultList();

@@ -1,6 +1,8 @@
 package ticketing.ticket.member.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +27,12 @@ public class MemberCouponController {
          memberCouponService.saveMemberCoupon(memberCouponRequestDto);
          return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/all/{memberId}")
+    public ResponseEntity<?> getAllByMemberId(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberCouponService.findAllByMemberId(memberId));
+    }
+
+
 
 }

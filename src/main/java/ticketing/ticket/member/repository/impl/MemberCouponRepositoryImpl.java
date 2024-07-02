@@ -1,6 +1,8 @@
 package ticketing.ticket.member.repository.impl;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -19,5 +21,12 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository{
     @Override
     public void save(MemberCoupon memberCoupon) {
         em.persist(memberCoupon);
+    }
+
+    @Override
+    public List<MemberCoupon> findAllByMemberId(Long memberId) {
+        return em.createQuery("select mc from MemberCoupon join fetch mc.coupon where mc.member.id = :memberId", MemberCoupon.class)
+                .setParameter("memberId", memberId)
+                .getResultList();
     }
 }
