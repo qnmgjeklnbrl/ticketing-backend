@@ -25,8 +25,13 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository{
 
     @Override
     public List<MemberCoupon> findAllByMemberId(Long memberId) {
-        return em.createQuery("select mc from MemberCoupon join fetch mc.coupon where mc.member.id = :memberId", MemberCoupon.class)
+        return em.createQuery("select mc from MemberCoupon mc join fetch mc.coupon c where mc.member.id = :memberId", MemberCoupon.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
+    }
+
+    @Override
+    public MemberCoupon findById(Long memberCouponId) {
+        return em.find(MemberCoupon.class, memberCouponId);
     }
 }

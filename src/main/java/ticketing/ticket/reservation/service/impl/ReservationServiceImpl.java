@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import ticketing.ticket.coupon.domain.entity.Coupon;
+import ticketing.ticket.coupon.repository.CouponRepository;
+import ticketing.ticket.member.domain.entity.MemberCoupon;
+import ticketing.ticket.member.repository.MemberCouponRepository;
 import ticketing.ticket.member.repository.MemberRepository;
 import ticketing.ticket.reservation.domain.dto.MemberSeatReservationResponseDto;
 import ticketing.ticket.reservation.domain.dto.ReservationRequestDto;
@@ -23,16 +27,22 @@ import ticketing.ticket.reservation.service.ReservationService;
 public class ReservationServiceImpl implements ReservationService {
     private final SeatReservationRepository seatReservationRepository;
     private final MemberSeatReservationRepository memberSeatReservationRepository;
+    private final MemberCouponRepository memberCouponRepository;
     private final MemberRepository memberRepository;
+   
 
     @Override
     public void setReservation(ReservationRequestDto reservationRequestDto) {
        SeatReservation seatReservation = seatReservationRepository.findById(reservationRequestDto.getSeatReservationId());
+       Optional<MemberCoupon> memberCoupon = Optional.ofNullable(memberCouponRepository.findById(reservationRequestDto.getMemberCouponId()));
+       
+
        if (seatReservation.isAvailable()) {
            seatReservation.setAvailable(false);
            MemberSeatReservation memberSeatReservation = new MemberSeatReservation();
            memberSeatReservation.setMember( memberRepository.findById( reservationRequestDto.getMemberId() ) );
            memberSeatReservation.setSeatReservation(seatReservation);
+           memberSeatReservation.setTotalPrice(reservationRequestDto.getTotalPrice());
            seatReservationRepository.save(seatReservation);
            memberSeatReservationRepository.save(memberSeatReservation);
        } else {
@@ -55,4 +65,6 @@ public class ReservationServiceImpl implements ReservationService {
         Optional<MemberSeatReservation> memberSeatReservation = memberSeatReservationRepository.findBySeatReservationId(seatReservationId);
         return memberSeatReservation.isPresent() ? memberSeatReservation.get().toDto() : null;
     }
+
+    
 }
