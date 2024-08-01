@@ -20,12 +20,16 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository{
 
     @Override
     public void save(MemberCoupon memberCoupon) {
-        em.persist(memberCoupon);
+        if(memberCoupon.getMemberCouponId() == null){
+            em.persist(memberCoupon);
+        }else{
+            em.merge(memberCoupon);
+        }
     }
 
     @Override
     public List<MemberCoupon> findAllByMemberId(Long memberId) {
-        return em.createQuery("select mc from MemberCoupon mc join fetch mc.coupon c where mc.member.id = :memberId", MemberCoupon.class)
+        return em.createQuery("select mc from MemberCoupon mc join fetch mc.coupon c where mc.member.id = :memberId and mc.isUsed = false", MemberCoupon.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
     }
@@ -33,5 +37,10 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository{
     @Override
     public MemberCoupon findById(Long memberCouponId) {
         return em.find(MemberCoupon.class, memberCouponId);
+    }
+
+    @Override
+    public void delete(MemberCoupon memberCoupon) {
+        em.remove(memberCoupon);
     }
 }

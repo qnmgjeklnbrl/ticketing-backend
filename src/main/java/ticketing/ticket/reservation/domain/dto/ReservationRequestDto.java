@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReservationRequestDto {
+    
     private Long seatReservationId;
     private Long memberId;
     private Long memberCouponId;

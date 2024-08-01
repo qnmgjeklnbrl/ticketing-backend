@@ -63,6 +63,7 @@ public class MemberCouponServiceImpl implements MemberCouponService{
                         .memberId(memberCoupon.getMember().getMemberId())
                         .endDate(memberCoupon.getCoupon().getEndDate())
                         .percent(memberCoupon.getCoupon().getPercent())
+                        .memberCouponId(memberCoupon.getMemberCouponId())
                         .build())
                 .collect(Collectors.toList());
     }

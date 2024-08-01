@@ -18,6 +18,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 @Getter
 
 public class MemberCouponResponseDto {
+    private Long memberCouponId;
     private Long couponId;
     private String name;
     private Long memberId;

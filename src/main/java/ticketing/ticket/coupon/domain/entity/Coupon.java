@@ -8,12 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.ToString;
 import ticketing.ticket.base.BaseEntity;
 import ticketing.ticket.coupon.domain.dto.CouponDto;
 import ticketing.ticket.member.domain.entity.MemberCoupon;
 
 @Entity
 @Data
+@ToString(exclude = "memberCoupons")
 public class Coupon  extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

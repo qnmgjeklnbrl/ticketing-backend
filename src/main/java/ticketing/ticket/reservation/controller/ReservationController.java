@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ticketing.ticket.reservation.domain.dto.SeatReservationResponseDto;
 import lombok.RequiredArgsConstructor;
+import ticketing.ticket.reservation.domain.dto.CalPriceRequsetDto;
 import ticketing.ticket.reservation.domain.dto.MemberSeatReservationResponseDto;
 import ticketing.ticket.reservation.domain.dto.ReservationRequestDto;
 import ticketing.ticket.reservation.service.ReservationService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class ReservationController {
 
     @GetMapping("/all/{perfDetailId}")
     public ResponseEntity<List<SeatReservationResponseDto>> getSeatReservationList(@PathVariable Long perfDetailId){
-        List<SeatReservationResponseDto> reservations = reservationService.getSeatReservationList(perfDetailId);
+        List<SeatReservationResponseDto> reservations = reservationService.getSeatReservationListByPerformanceDetail(perfDetailId);
         return ResponseEntity.ok(reservations);
     }
 
@@ -40,5 +43,20 @@ public class ReservationController {
         MemberSeatReservationResponseDto memberSeatReservationDto = reservationService.getMemberSeatReservation(seatReservationId);
         return ResponseEntity.ok(memberSeatReservationDto);
     }
+
+    @PostMapping("/price")
+    public ResponseEntity<Integer> calPrice(@RequestBody CalPriceRequsetDto calPriceRequsetDto) {
+        //TODO: process POST request
+        int price = reservationService.calPrice(calPriceRequsetDto);
+        
+        return ResponseEntity.ok(price);
+    }
+    @GetMapping("/all/by-member/{memberId}")
+    public ResponseEntity<List<SeatReservationResponseDto>> getMemberSeatReservationList(@PathVariable Long memberId) {
+        List<SeatReservationResponseDto> seatReservationList = reservationService.getSeatReservationListByMember(memberId);
+        return ResponseEntity.ok(seatReservationList);
+    }
+    
+    
 }
 

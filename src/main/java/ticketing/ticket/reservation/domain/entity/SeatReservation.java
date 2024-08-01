@@ -46,6 +46,7 @@ public class SeatReservation extends BaseEntity {
         .available(this.available)
         .performDetailId(this.performanceDetail.getPerformanceDetailId())
         .grade(this.seat.getGrade())
+        .performanceDetail(this.performanceDetail.toDto())
         .build();
     }
     
