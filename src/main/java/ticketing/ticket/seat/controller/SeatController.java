@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/seat")
@@ -20,8 +21,9 @@ public class SeatController {
     public SeatController(SeatService seatService){
         this.seatService = seatService;
     }
-    @Secured("ROLE_ADMIN")
+   
     @PostMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> setAllseat(
             @RequestParam("row") int row, 
             @RequestParam("col") int col ) {

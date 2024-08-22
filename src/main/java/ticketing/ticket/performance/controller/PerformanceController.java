@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +46,7 @@ public class PerformanceController {
     // 공연 카테고리 저장
     
     @PostMapping("/perform/save")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> setPerformance(@RequestBody PerformanceDto performanceDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authority = authentication.getAuthorities().stream()
@@ -74,6 +75,7 @@ public class PerformanceController {
     }
     // 공연 카테고리 삭제
     @DeleteMapping("/delete-performance/{performanceId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deletePerformance(@PathVariable Long performanceId){
         performanceService.deletePerformance(performanceId);
         return ResponseEntity.ok().build();
@@ -83,8 +85,8 @@ public class PerformanceController {
 
 
     // 공연 디테일 저장
-    @Secured("ROLE_ADMIN")
     @PostMapping("/perform-detail/save")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> setPerformanceDetail(@RequestBody PerformanceDetailDto performanceDetailDto){
         performanceDetailService.setPerformanceDetail(performanceDetailDto);
         return ResponseEntity.ok().build();
@@ -110,6 +112,7 @@ public class PerformanceController {
     
     // 공연 디테일 삭제
     @DeleteMapping("/delete-performancedetailId/{performanceDetailId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deletePerformanceDetail(@PathVariable Long PerformanceDetailId){
         performanceDetailService.deletePerformanceDetail(PerformanceDetailId);
         return ResponseEntity.ok().build();

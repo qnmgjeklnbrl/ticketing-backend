@@ -2,6 +2,7 @@ package ticketing.ticket.coupon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,9 @@ public class CouponController {
     public CouponController(CouponService couponService){
         this.couponService = couponService;
     }
-    @Secured("ROLE_ADMIN")
+   
     @PostMapping("/save")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> setCoupon(@RequestBody CouponDto couponDto) {
       
         couponService.setCoupon(couponDto);       

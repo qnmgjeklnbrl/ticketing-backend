@@ -17,6 +17,7 @@ public class CorsConfig implements WebMvcConfigurer {
             .addMapping("/**")
             .allowedHeaders("*")
             .allowedOrigins("http://localhost:8080","https://d2yldon36ylcmn.cloudfront.net")
+            .exposedHeaders("Authorization")
             .allowedMethods("*");
     }
 }
