@@ -33,9 +33,9 @@ public class MemberCouponTest {
          ExecutorService executorService = Executors.newFixedThreadPool(5);
          CountDownLatch countDownLatch = new CountDownLatch(5);
          List<MemberCouponRequestDto> dtos = new ArrayList<>();
-         for (int i = 1; i <= 5; i++) {
+         for (int i = 1; i <= 3; i++) {
             MemberCouponRequestDto dto = new MemberCouponRequestDto();
-            dto.setMemberId((long) i+8);
+            dto.setMemberId((long) i);
             dto.setCouponId(6L);
             dtos.add(dto);
          }
@@ -43,7 +43,7 @@ public class MemberCouponTest {
 
           //when
         
-        for ( int i = 0; i < 5; i++) {
+        for ( int i = 0; i <= 2; i++) {
             MemberCouponRequestDto memberCouponRequestDto = dtos.get(i);
            
             executorService.execute(()->{

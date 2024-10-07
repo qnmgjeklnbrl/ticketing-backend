@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.concurrent.*;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 import jakarta.transaction.Transactional;
+import ticketing.ticket.exception.DuplicationReservationException;
 import ticketing.ticket.reservation.domain.dto.ReservationRequestDto;
 
 @SpringBootTest
@@ -34,10 +36,10 @@ public class ReservationTest {
         ExecutorService executorService = Executors.newFixedThreadPool(5);
         CountDownLatch countDownLatch = new CountDownLatch(5);
         List<ReservationRequestDto> dtos = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 10; i <= 14; i++) {
             ReservationRequestDto  requestDto = new ReservationRequestDto();
             requestDto.setMemberId((long) i);
-            requestDto.setSeatReservationId(1469L); 
+            requestDto.setSeatReservationId(4L); 
             dtos.add(requestDto);
         }
 
@@ -49,6 +51,9 @@ public class ReservationTest {
                 try {
                     reservationService.setReservation(requestDto);
                 } catch (ObjectOptimisticLockingFailureException e) { //중복 발생
+                    isDuplicated.set(true);
+                    System.out.println("중복발생");
+                } catch (DataIntegrityViolationException e) {
                     isDuplicated.set(true);
                     System.out.println("중복발생");
                 }

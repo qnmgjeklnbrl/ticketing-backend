@@ -51,8 +51,11 @@ public class ReservationServiceImpl implements ReservationService {
            memberSeatReservation.setTotalPrice(reservationRequestDto.getTotalPrice());
            seatReservationRepository.save(seatReservation);
            memberSeatReservationRepository.save(memberSeatReservation);
-           memberCoupon.ifPresent(mc -> mc.setUsed(true));
-           memberCouponRepository.save(memberCoupon.get());
+           memberCoupon.ifPresent(mc -> {
+            mc.setUsed(true);
+            memberCouponRepository.save(mc);           
+        });
+           
         } else {
             throw new DuplicationReservationException("이미 예약된 좌석입니다.");
         }

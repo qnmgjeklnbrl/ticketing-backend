@@ -26,10 +26,12 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository{
             em.merge(memberCoupon);
         }
     }
+    //
 
     @Override
     public List<MemberCoupon> findAllByMemberId(Long memberId) {
-        return em.createQuery("select mc from MemberCoupon mc join fetch mc.coupon c where mc.member.id = :memberId and mc.isUsed = false", MemberCoupon.class)
+        
+        return em.createQuery("select mc from MemberCoupon mc  where mc.member.id = :memberId and mc.isUsed = false", MemberCoupon.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
     }
